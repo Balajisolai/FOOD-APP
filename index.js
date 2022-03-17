@@ -16,6 +16,7 @@
 // var PORT=app.listen(3001,()=>{
 //   console.log("app is running successfully",PromiseRejectionEvent);
 // });
+import cors from "cors";
 
 import express from "express";
 import { MongoClient } from "mongodb";
@@ -108,6 +109,7 @@ const movies = [
     trailer: "https://www.youtube.com/embed/NgsQ8mVkN8w",
   },
 ];
+app.use(cors());
 
 // app.use(express.json());
 
@@ -134,7 +136,7 @@ app.get("/movies",async function (request, response) {
   .collection("movies")
   .find({ })
   .toArray();
-  response.send("movies");
+  response.send(movies);
 });
 
 
