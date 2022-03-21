@@ -131,11 +131,7 @@ app.get("/", function (request, response) {
 
 app.get("/movies",async function (request, response) {
 
-  const movies = await client
-  .db("b30wd")
-  .collection("movies")
-  .find({ })
-  .toArray();
+  const movies = await getAllMovies();
   response.send(movies);
 });
 
@@ -145,10 +141,7 @@ app.get("/movies/id", async function (request, response) {
   // db.movies.find({})
 console.log(request.params)
 const{id}=request.params;
-  const movie = await client
-    .db("b30wd")
-    .collection("movies")
-    .findOne({id:id});
+  const movie = await getMoviesById(id);
    console.log(movie);
    movie
    ? response.send(movie)
@@ -168,7 +161,7 @@ app.delete("/movies/:id", async function (request, response) {
   const result = await client
     .db("b30wd")
     .collection("movies")
-    .deleteOne({id:id})
+    .deleteOne({id: 
     
   response.send(result);
 });
@@ -180,10 +173,7 @@ app.put("/movies/:id", async function (request, response) {
   const { id } = request.params;
   const updateData = request.body;
 
-  const result = await client
-    .db("b30wd")
-    .collection("movies")
-    .updateOne({ id: id }, { $set: updateData });
+  const result = await editMoviesById(id, updateData);
   response.send(result);
 });
 
@@ -199,3 +189,26 @@ app.post("/movies", async function (request, response) {
 });
 
 app.listen(PORT, () => console.log(`Server started in ${PORT}`));
+
+async function editMoviesById(id, updateData) {
+  return await client
+    .db("b30wd")
+    .collection("movies")
+    .updateOne({ id: id }, { $set: updateData });
+}
+
+async function getAllMovies() {
+  return await client
+    .db("b30wd")
+    .collection("movies")
+    .find({})
+    .toArray();
+}
+
+async function getMoviesById(id) {
+  return await client
+    .db("b30wd")
+    .collection("movies")
+    .findOne({ id: id });
+}
+getAllMovies
