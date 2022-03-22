@@ -22,8 +22,9 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import Dotenv from 'dotenv'
 import { getMoviesById, deleteMoviesById, editMoviesById, getAllMovies} from "./helper.js";
-import {moviesRouter} from "./routes/movies.js"
-
+import {moviesRouter} from "./routes/movies.js "
+import {usersRouter} from "./routes/users.js "
+import bcrypt from "bcrypt";
 dotenv.config();
 
 console.log(process.env.MONGO_URL);
@@ -182,7 +183,8 @@ app.get("/", function (request, response) {
 //   response.send(result);
 // });
 
-app.use('/movies',moviesRouter)
+app.use("/movies",moviesRouter)
+app.use("/users",moviesRouter)
 app.listen(PORT, () => console.log(`Server started in ${PORT}`));
 
 // async function deleteMoviesById(id) {
@@ -208,3 +210,12 @@ app.listen(PORT, () => console.log(`Server started in ${PORT}`));
 // }
 
 // getAllMovies
+
+// async function genPassword(password){
+
+//   const salt = await bcrypt.genSalt(10);
+//   const hashPassword = await bcrypt.hash(password, salt);
+//   console.log({salt,hashPassword});
+// }
+// genPassword("password@123");
+

@@ -1,5 +1,5 @@
 import express from 'express';
-import express from "express";import {createMovies, deleteMovieById,getAllMovies,getMovieById,updateMovieById,} from "../helper.js";
+import express from "express";import {createMovies, deleteMovieById,getAllMovies,getMovieById,updateMovieById} from "../helper.js";
 const router = express.Router();
 router.get("/movies",async function (request, response) {
 
