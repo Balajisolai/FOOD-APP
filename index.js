@@ -21,12 +21,16 @@ import cors from "cors";
 import express from "express";
 import { MongoClient } from "mongodb";
 import Dotenv from 'dotenv'
-Dotenv.config();
+import { getMoviesById, deleteMoviesById, editMoviesById, getAllMovies} from "./helper.js";
+import {moviesRouter} from "./routes/movies.js"
+
+dotenv.config();
+
 console.log(process.env.MONGO_URL);
 
 //const express = require("express");
 const app = express();
-app.use(express.json());
+// app.use(express.json());
 
 const PORT = process.env.PORT;
 
@@ -111,7 +115,7 @@ const movies = [
 ];
 app.use(cors());
 
-// app.use(express.json());
+app.use(express.json());
 
 // const MONGO_URL = "mongodb://localhost";
 const MONGO_URL = process.env.MONGO_URL;
@@ -121,7 +125,7 @@ async function createConnection() {
   console.log("Mongo is connected ✌️😊");
   return client;
 }
-const client = await createConnection();
+export const client = await createConnection();
 
 
 
@@ -129,86 +133,78 @@ app.get("/", function (request, response) {
   response.send("Hello World balaji");
 });
 
-app.get("/movies",async function (request, response) {
+// app.get("/movies",async function (request, response) {
 
-  const movies = await getAllMovies();
-  response.send(movies);
-});
+//   const movies = await getAllMovies();
+//   response.send(movies);
+// });
 
-
-
-app.get("/movies/id", async function (request, response) {
-  // db.movies.find({})
-console.log(request.params)
-const{id}=request.params;
-  const movie = await getMoviesById(id);
-   console.log(movie);
-   movie
-   ? response.send(movie)
-   : response.status(404).send({ message: "No such movie found 😅" });
+// app.get("/movies/id", async function (request, response) {
+//   // db.movies.find({})
+// console.log(request.params)
+// const{id}=request.params;
+//   const movie = await getMoviesById(id);
+//    console.log(movie);
+//    movie
+//    ? response.send(movie)
+//    : response.status(404).send({ message: "No such movie found 😅" });
 
 
-});
+// });
  
 
+// app.delete("/movies/:id", async function (request, response) {
+//   // db.movies.find({})
+//   console.log(request.params)
 
-
-app.delete("/movies/:id", async function (request, response) {
-  // db.movies.find({})
-  console.log(request.params)
-
-  const{id}=request.params;
-  const result = await client
-    .db("b30wd")
-    .collection("movies")
-    .deleteOne({id: 
+//   const{id}=request.params;
+//   const result = await deleteMoviesById(id);
     
-  response.send(result);
-});
+//   response.send(result)
+// });
 
-app.put("/movies/:id", async function (request, response) {
-  console.log(request.params);
+// app.put("/movies/:id", async function (request, response) {
+//   console.log(request.params);
 
-  // db.movies.updateOne({id: "102"}, {$set: upadateData})
-  const { id } = request.params;
-  const updateData = request.body;
+//   // db.movies.updateOne({id: "102"}, {$set: upadateData})
+//   const { id } = request.params;
+//   const updateData = request.body;
 
-  const result = await editMoviesById(id, updateData);
-  response.send(result);
-});
-
-
+//   const result = await editMoviesById(id, updateData);
+//   response.send(result);
+// });
 
 
+// app.post("/movies", async function (request, response) {
+//   const data = request.body;
+//   console.log(data);
+//   const result = await client.db("b30wd").collection("movies").insertMany(data);
+//   response.send(result);
+// });
 
-app.post("/movies", async function (request, response) {
-  const data = request.body;
-  console.log(data);
-  const result = await client.db("b30wd").collection("movies").insertMany(data);
-  response.send(result);
-});
-
+app.use('/movies',moviesRouter)
 app.listen(PORT, () => console.log(`Server started in ${PORT}`));
 
-async function editMoviesById(id, updateData) {
-  return await client
-    .db("b30wd")
-    .collection("movies")
-    .updateOne({ id: id }, { $set: updateData });
-}
+// async function deleteMoviesById(id) {
+//   return await client
+//     .db("b30wd")
+//     .collection("movies")
+//     .deleteOne({ id: id });
+// }
 
-async function getAllMovies() {
-  return await client
-    .db("b30wd")
-    .collection("movies")
-    .find({})
-    .toArray();
-}
+// async function editMoviesById(id, updateData) {
+//   return await client
+//     .db("b30wd")
+//     .collection("movies")
+//     .updateOne({ id: id }, { $set: updateData });
+// }
 
-async function getMoviesById(id) {
-  return await client
-    .db("b30wd")
-    .collection("movies")
-    .findOne({ id: id });
-}
-getAllMovies
+// async function getAllMovies() {
+//   return await client
+//     .db("b30wd")
+//     .collection("movies")
+//     .find({})
+//     .toArray();
+// }
+
+// getAllMovies
